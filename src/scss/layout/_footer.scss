@@ -1,6 +1,7 @@
 .footer {
     background-color: $grisOscuro;
     padding: 2.5rem 0;
+    margin: 0;
     .contenedor-footer{
         padding-top: calc($separacion / 2);
     }
@@ -10,6 +11,7 @@
     }
     .copyright {
         color: $blanco;
-        text-align: center;
+        text-align: center; margin: 1rem 0;
+        padding-top: 5rem;
     }
 }
