@@ -1,4 +1,9 @@
 <?php 
+    require '../../Includes/funciones.php';
+    $auth = estaAutenticado();
+    if(!$auth) {
+        header('Location: /');
+    }    
     //Base de datos
     require '../../Includes/config/database.php';
     $db = conectarDB();
@@ -103,7 +108,7 @@
                 }
         }
     }
-    require '../../Includes/funciones.php';
+    
     incluirTemplate('header');
 ?>
     <main class="contenedor seccion">

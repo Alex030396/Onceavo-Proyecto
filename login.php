@@ -2,7 +2,7 @@
     require 'Includes/config/database.php';
     $db = conectarDB();
     //Autenticar el usuario
-    $rerrores = [];
+    $errores = [];
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
         // echo "<pre>";
         // var_dump($_POST);
@@ -11,21 +11,33 @@
         var_dump($email);
         $clave = mysqli_real_escape_string ($db, $_POST['clave']);
         if(!$email) {
-            $rerrores[] = "El email es obligatorio o no es valido.";
+            $errores[] = "El email es obligatorio o no es valido.";
         }
         if(!$clave) {
-            $rerrores[] = "La clave es obligatorio o no es valida.";
+            $errores[] = "La clave es obligatorio o no es valida.";
         }
         if(empty($errores)) {
             //revisar si el usuario existe.
             $query = "SELECT * FROM usuarios WHERE email = '{$email}'";
             $resultado = mysqli_query($db, $query);
             
-            var_dump($resultado);
-
+            
             if( $resultado->num_rows ) {
                 //Revisar si el password es correcto
+                $usuario = mysqli_fetch_assoc($resultado);
+                //Verificar si la clave es correcta o no
+                $auth = password_verify($clave, $usuario['clave']);
                 
+                if($auth) {
+                    //El usuario esta utenticado
+                    session_start();
+                    //Llenar el arreglo de la sesión
+                    $_SESSION['usuario'] = $usuario['email'];
+                    $_SESSION['login'] = true;
+                    header('Location: /admin');
+                } else {
+                    $errores[] = "La clave es incorrecta.";
+                }
             } else {
                 $errores[] = "El usuario no existe";
             }
